@@ -1,4 +1,3 @@
-import React from 'react';
 import { Context } from './InputArea';
 import { useContext } from 'react';
 

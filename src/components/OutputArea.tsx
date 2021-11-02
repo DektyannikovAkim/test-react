@@ -1,8 +1,12 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import { Radioarea } from './RadioArea';
 
+interface Props {
+    value: string,
+    numbOfChildComp: number
+}
 
-export const Outputarea = memo((props) => {
+export const Outputarea = memo((props: Props) => {
 
     return (
         <div className="wrapper-for-radio">

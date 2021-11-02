@@ -1,61 +1,70 @@
-import { makeAutoObservable } from 'mobx'
-import { createContext, FC } from 'react';
-import { TodoModel } from '../moduls/todo';
+import { makeAutoObservable } from "mobx";
+import { createContext, FC } from "react";
+import { TodoModel } from "../moduls/todo";
 
-
+interface ItemCoordModel {
+  top: string,
+  left: string
+}
 export class Todo {
-    todos: TodoModel[] = [];
-    contextMenuCoord = {
-        top: '',
-        left: ''
-    };
+  todos: TodoModel[] = [];
 
-    openContextMenu: TodoModel | undefined = undefined;
+  contextMenuCoord: ItemCoordModel = {
+    top: '',
+    left: '',
+  };
 
-    constructor() {
-        makeAutoObservable(this)
-    }
+  selectedTodo: Element | undefined = undefined;
 
-    completeTodo(todo: TodoModel) {
-        todo.completed = !todo.completed
-    }
+  openContextMenu: TodoModel | undefined = undefined;
 
-    removeTodo(id: TodoModel['id']) {
-        this.todos = this.todos.filter(el => el.id !== id);
-    }
+  constructor() {
+    makeAutoObservable(this);
+  }
 
-    closeContextMenu() {
-        this.openContextMenu = undefined;
-    }
+  completeTodo(todo: TodoModel) {
+    todo.completed = !todo.completed;
+  }
 
-    showTodoContextMenu(e: React.MouseEvent, todo: TodoModel) {
-        e.preventDefault();
-        this.openContextMenu = todo;
-        this.contextMenuCoord.left = `${e.pageX}px`;
-        this.contextMenuCoord.top = `${e.pageY}px`;
-    }
+  removeTodo(id: TodoModel["id"]) {
+    this.todos = this.todos.filter((el) => el.id !== id);
+    this.closeContextMenu();
+  }
 
-    getTodos() {
-        fetch('https://jsonplaceholder.typicode.com/todos')
-            .then(response => response.json())
-            .then(json => {
-                // for (let i = 0; i < 5; i++ ) {
-                //     this.todos.push(json[i])
-                // }
-                this.todos = json;
-            })
-    }
+  closeContextMenu() {
+    this.openContextMenu = undefined;
+  }
 
+  changeMenuCoordinates(left: number, top: number) {
+    this.contextMenuCoord.left = `${left}px`;
+    this.contextMenuCoord.top = `${top}px`;
+  }
+
+  showTodoContextMenu(e: React.MouseEvent, todo: TodoModel) {
+    e.preventDefault();
+    this.openContextMenu = todo;
+    this.changeMenuCoordinates(e.pageX, e.pageY);
+  }
+
+  getTodos() {
+    fetch("https://jsonplaceholder.typicode.com/todos")
+      .then((response) => response.json())
+      .then((json) => {
+        // for (let i = 0; i < 5; i++ ) {
+        //     this.todos.push(json[i])
+        // }
+        this.todos = json.slice(0, 2);
+      });
+  }
 }
 
 export const TodoStoreContext = createContext({} as Todo);
 
 export const TodoStoreProvider: FC = (props) => {
-    const store = new Todo();
-    console.log(props);
-    return (
-        <TodoStoreContext.Provider value={store}>
-            {props.children}
-        </TodoStoreContext.Provider>
-    )
-}
+  const store = new Todo();
+  return (
+    <TodoStoreContext.Provider value={store}>
+      {props.children}
+    </TodoStoreContext.Provider>
+  );
+};

@@ -1,4 +1,3 @@
-import React from "react";
 import { InputArea } from "./components/InputArea";
 import { Inputarea as  Inputarea2} from "./componentsInst/InputArea";
 import { Todolist } from "./components/TodoList";

@@ -2,8 +2,12 @@ import React, { useState } from 'react';
 import { Outputarea } from './OutputArea';
 import { Radioarea } from './RadioArea';
 
+interface radioModel {
+    radioCheck: boolean,
+    setRadioCheck: Function
+}
 
-export const Context = React.createContext()
+export const Context = React.createContext({} as radioModel)
 
 export const InputArea = () => {
     const [valueFstInpt, setValueFstInpt] = useState('');
@@ -11,17 +15,17 @@ export const InputArea = () => {
     const [radioCheckFirst, setRadioCheckFirst] = useState(false);
     const [radioCheckSecond, setRadioCheckSecond] = useState(false);
 
-const radioFirst = {
+const radioFirst: radioModel = {
     radioCheck:radioCheckFirst,
     setRadioCheck:setRadioCheckFirst
 }
 
-const radioSecond = {
+const radioSecond:radioModel = {
     radioCheck:radioCheckSecond,
     setRadioCheck:setRadioCheckSecond
 }
 
-    let numbOfChildComp = 1;
+    let numbOfChildComp: number = 1;
 
     return (
        
